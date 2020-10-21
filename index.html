@@ -1,0 +1,323 @@
+<html>
+<head>
+	<title>pingpong</title>
+	<link rel="stylesheet" href="styles.css" type="text/css">
+</head>
+<body>
+
+<div id="container">
+<div id ="rod1">rod1</div>
+<div id="rod2">rod2
+	
+
+
+</div>
+
+<div id="ball">
+	
+
+</div>
+</div>
+
+<div id="al">
+        <h2>To Start Game-Press <b><u>Enter</u></b></h3>
+        <h2>To move rod left-Press <b><u>A</u></b></h3>
+        <h2>To move rod right-Press <b><u>D</u></b></h3>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+
+
+
+
+var ball=document.getElementById("ball");
+var rod1=document.getElementById("rod1");
+var rod2=document.getElementById("rod2");
+let rod1name="Rod1";
+let rod2name="Rod2";
+let storename="abc";
+let storescore="1";
+
+let maxscore;
+// let name="abc";
+// let score1;
+let score;
+
+let rodspeed=20;
+let gameon=false;
+let rod;
+
+
+let windowWidth=window.innerWidth;
+let windowHeight=window.innerHeight;
+let ballspeedX=2;
+let ballspeedY=2;
+
+
+
+function reset(rod){
+
+rod1.style.left=(windowWidth-rod1.offsetWidth)/2+"px";
+rod2.style.left=(windowWidth-rod2.offsetWidth)/2+"px";
+ball.style.left=(windowWidth-ball.offsetWidth)/2+"px";
+
+
+
+if(rod==rod1name)
+{
+
+	ball.style.top=(rod2.offsetTop-rod2.offsetHeight)+'px';
+
+ballspeedY=-2;
+
+
+
+}
+
+else if(rod==rod2name)
+{
+	ball.style.top=(rod1.offsetTop+rod1.offsetHeight)+'px';
+
+ballspeedY=2;
+
+}
+score=0;
+
+gameon=false;
+
+
+
+
+
+}
+
+function start(){
+
+rod=localStorage.getItem(storename);
+ maxscore=localStorage.getItem(storescore);
+if(rod==null||maxscore==null)
+{
+	alert("this is your first time start to press enter");
+maxscore=0;
+rod=rod1name;
+
+}
+else {
+
+
+	alert(rod +"maxscore is "+ maxscore*100);
+
+}
+
+reset(rod);
+
+
+
+
+
+
+}
+
+
+start();
+
+
+
+
+
+
+
+function wins(rod,score){
+
+if(score>maxscore)
+{
+
+	maxscore=score;
+	// name=rod;
+
+	localStorage.setItem(storescore,maxscore);
+	localStorage.setItem(storename,rod);
+
+
+}
+alert(rod+ "wins with a maxscore of "+score*100+ "and MAXSCORE Is"+maxscore*100);
+clearInterval(movement);
+
+reset(rod);
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+window.addEventListener("keypress",function(event){
+
+
+
+let rodrect=rod1.getBoundingClientRect();
+
+
+if(event.code==="KeyA")
+{
+if(rodrect.x>0)
+{
+	rod1.style.left=(rodrect.x)-rodspeed+"px";
+	rod2.style.left=rod1.style.left;
+}
+
+}
+
+if(event.code==="KeyD")
+
+{
+if((rodrect.x+rod1.offsetWidth)<windowWidth)
+{
+	rod1.style.left=(rodrect.x)+rodspeed+"px";
+	rod2.style.left=rod1.style.left;
+
+}
+}
+
+
+
+
+
+if(event.code==="Enter")
+{
+	if(!gameon)
+	{
+		// document.getElementById("#place").remove();
+$("#al").remove();
+
+ballrect=ball.getBoundingClientRect();
+let ballX=ballrect.x;
+
+let ballY=ballrect.y;
+		gameon=true;
+
+let balldia=ballrect.width;
+
+
+// let rod1x=rod1.getBoundingClientRect().x;
+// // let rod2x=rod2.offsetX;
+// let rod2x=rod2.getBoundingClientRect().x;
+
+let rodwidth=rod1.offsetWidth;
+
+movement=setInterval(function(){
+
+
+// let ballrect=ball.getBoundingClientRect();
+// let ballX=ballrect.x;
+// let balldia=ballrect.width;
+
+// let ballY=ballrect.y;
+let rod1x=rod1.getBoundingClientRect().x;
+// let rod2x=rod2.offsetX;
+let rod2x=rod2.getBoundingClientRect().x;
+
+  ballX+=ballspeedX;
+ ballY+=ballspeedY;
+
+ball.style.left=ballX+"px";
+ball.style.top=ballY+"px";
+
+
+if((ballX+ball.offsetWidth)>window.innerWidth || ballX<0)
+{
+	ballspeedX=-ballspeedX;
+
+}
+
+let ballpos=ballX+balldia/2;
+
+
+if(ballY<=rod1.offsetHeight)
+{
+	ballspeedY=-ballspeedY;
+	score++;
+
+
+if((ballpos<rod1x)||(ballpos>(rod1x+rodwidth)))
+{
+
+
+
+
+
+// alert();
+wins(rod2name,score);
+}
+
+
+
+}
+
+else if((ballY+balldia)>=(windowHeight-rod2.offsetHeight))
+{
+	ballspeedY=-ballspeedY;
+	score++;
+
+	if((ballpos<rod2x)||(ballpos>(rod2x+rodwidth)))
+	{
+		wins(rod1name,score);
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+	},10);
+
+}
+
+
+
+
+
+
+}
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+    </body>
+    </html>
